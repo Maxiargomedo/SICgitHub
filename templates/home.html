@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block extra_css %}
+<style>
+    .form-disabled {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+    .sample-form {
+        display: none;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        border: 1px solid #dee2e6;
+    }
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-file-alt me-2"></i> Solicitud de Compra - SIC</h3>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="mainForm">
+                        {% csrf_token %}
+                        
+                        <!-- Sección 1: Datos Automáticos (siempre visible) -->
+                        <div class="mb-5">
+                            <h4 class="border-bottom pb-2"><i class="fas fa-database me-2"></i>Datos del Sistema</h4>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-light" id="sic_number" value="SIC-{{ request.user.id }}-{% now 'ymd' %}" readonly>
+                                        <label for="sic_number">N° SIC</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-5">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-light" id="departamento" value="{{ request.user.profile.departamento|default:'Gerencia de Operaciones' }}" readonly>
+                                        <label for="departamento">Sección/Depto/Gerencia</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control bg-light" id="fecha_sic" value="{% now 'Y-m-d' %}" readonly>
+                                        <label for="fecha_sic">Fecha SIC</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="fecha_requerida" name="fecha_requerida" min="{% now 'Y-m-d' %}" required>
+                                        <label for="fecha_requerida">Fecha Requerida</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-light" id="solicitante" value="{{ request.user.get_full_name }}" readonly>
+                                        <label for="solicitante">Nombre Solicitante</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-light" id="autorizador" value="Pendiente" readonly>
+                                        <label for="autorizador">Nombre Autorizador</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checkbox para activar modo muestra -->
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" id="esMuestra" name="esMuestra">
+                            <label class="form-check-label" for="esMuestra">Esta solicitud es para una muestra</label>
+                        </div>
+
+                        <!-- Sección 2: Formulario de COMPRA (por defecto visible) -->
+                        <div id="formularioCompra">
+                            <div class="mb-4">
+                                <h4 class="border-bottom pb-2"><i class="fas fa-shopping-cart me-2"></i>Detalles de la Compra</h4>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" id="descripcion" name="descripcion" style="height: 100px" required></textarea>
+                                            <label for="descripcion">Descripción detallada de la compra</label>
+                                            <small class="text-muted">Ej: Materiales para mantenimiento preventivo de equipos</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-8">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" id="especificaciones" name="especificaciones" style="height: 100px" required></textarea>
+                                            <label for="especificaciones">Especificaciones técnicas</label>
+                                            <small class="text-muted">Detalle características técnicas requeridas</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-2">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required>
+                                            <label for="cantidad">Cantidad</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-2">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="unidad" name="unidad" required>
+                                                <option value="">Seleccione...</option>
+                                                <option value="c/u">c/u</option>
+                                                <option value="litros">Litros</option>
+                                                <option value="kilos">Kilos</option>
+                                                <option value="metros">Metros</option>
+                                                <option value="cajas">Cajas</option>
+                                            </select>
+                                            <label for="unidad">Unidad</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección 3: Formulario de MUESTRA (oculto por defecto) -->
+                        <div id="formularioMuestra" class="sample-form">
+                            <div class="mb-4">
+                                <h4 class="border-bottom pb-2"><i class="fas fa-vial me-2"></i>Detalles de la Muestra</h4>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" id="descripcion_muestra" name="descripcion_muestra" style="height: 100px"></textarea>
+                                            <label for="descripcion_muestra">Descripción detallada de la muestra</label>
+                                            <small class="text-muted">Ej: Muestra de material para evaluación técnica</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-8">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" id="especificaciones_muestra" name="especificaciones_muestra" style="height: 100px"></textarea>
+                                            <label for="especificaciones_muestra">Especificaciones técnicas requeridas</label>
+                                            <small class="text-muted">Detalle características técnicas a evaluar</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-2">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="cantidad_muestra" name="cantidad_muestra" min="1">
+                                            <label for="cantidad_muestra">Cantidad</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-2">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="unidad_muestra" name="unidad_muestra">
+                                                <option value="">Seleccione...</option>
+                                                <option value="c/u">c/u</option>
+                                                <option value="litros">Litros</option>
+                                                <option value="kilos">Kilos</option>
+                                                <option value="metros">Metros</option>
+                                                <option value="cajas">Cajas</option>
+                                            </select>
+                                            <label for="unidad_muestra">Unidad</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="button" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-2"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i> Enviar Solicitud
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="{% static 'js/solicitudes.js' %}"></script>
+{% endblock %}
+{% endblock %}

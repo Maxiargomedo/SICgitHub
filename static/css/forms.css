@@ -1,0 +1,25 @@
+/* Estilos específicos para formularios */
+.card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.form-floating textarea.form-control {
+    min-height: 100px;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+    cursor: not-allowed;
+}
+
+/* Mejoras para file input */
+.form-control[type="file"] {
+    padding: 0.5rem;
+}
+
+/* Adaptaciones móviles */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.25rem;
+    }
+}

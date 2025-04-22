@@ -1,0 +1,131 @@
+/* ===== DASHBOARD ===== */
+.dashboard-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 12px 12px;
+  }
+  
+  .dashboard-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary);
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-icon {
+    font-size: 2rem;
+    color: var(--primary);
+  }
+  
+  .user-welcome {
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  /* ===== TABLAS ===== */
+  .table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .table thead {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: white;
+  }
+  
+  /* ===== ANIMACIONES ===== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  /* Historial específico */
+.table-hover tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.badge {
+  font-size: 0.85em;
+  padding: 0.5em 0.75em;
+}
+
+.modal-details dt {
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.modal-details dd {
+  color: #718096;
+  margin-bottom: 1rem;
+}
+
+/* Botones de acción */
+.btn-action-group .btn {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.btn-action-group .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Íconos específicos */
+.fa-pencil { color: #fff; }
+.fa-trash { color: #fff; }
+.fa-ellipsis-v { color: #fff; }
+
+/* Estados deshabilitados */
+.btn.disabled .fa-pencil,
+.btn.disabled .fa-trash,
+.btn.disabled .fa-ellipsis-v {
+  opacity: 0.5;
+}
+
+/* Badges de estado */
+.badge.bg-success { background-color: #28a745!important; }
+.badge.bg-danger { background-color: #dc3545!important; }
+.badge.bg-warning { background-color: #ffc107!important; color: #000; }
+
+/* Iconos de acciones */
+.btn-sm i {
+  font-size: 1rem;
+  vertical-align: middle;
+  width: 1.2em;
+  height: 1.2em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Color específico para cada ícono */
+.btn-success .fa-pencil { color: white; }
+.btn-danger .fa-trash { color: white; }
+.btn-secondary .fa-ellipsis-v { color: white; }
+
+/* Efecto hover */
+.btn-sm:hover i {
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+/* Estados deshabilitados */
+.btn-sm.disabled i {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

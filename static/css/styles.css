@@ -1,0 +1,104 @@
+/* Estructura principal */
+body {
+  overflow-x: hidden;
+}
+
+/* Cuando no hay sidebar */
+body:not(.has-sidebar) .content {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* Cuando hay sidebar */
+body.has-sidebar .wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+body.has-sidebar .sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: #2c3e50;
+  color: white;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+body.has-sidebar .content {
+  width: calc(100% - 250px);
+  transition: all 0.3s;
+}
+
+/* Estilos del sidebar */
+.sidebar-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+}
+
+.user-info img {
+  border: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-link {
+  color: #adb5bd;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.nav-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  color: white;
+  background: #4e73df;
+}
+
+.nav-link i {
+  width: 20px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+/* Submenú */
+.collapse .nav-link {
+  padding: 0.5rem 1.5rem 0.5rem 3rem;
+  font-size: 0.9em;
+}
+
+/* Footer del sidebar */
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Formularios deshabilitados */
+.form-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body.has-sidebar .sidebar {
+      position: fixed;
+      z-index: 1000;
+      margin-left: -250px;
+  }
+  
+  body.has-sidebar .sidebar.collapsed {
+      margin-left: 0;
+  }
+  
+  body.has-sidebar .content {
+      width: 100%;
+      margin-left: 0;
+  }
+  
+  body.sidebar-collapsed .content {
+      margin-left: 250px;
+  }
+}

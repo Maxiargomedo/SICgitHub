@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Sistema de Autorización{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="{% static 'fontawesome/css/all.min.css' %}" rel="stylesheet">
+    
+    <!-- CSS personalizado -->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% if user.is_authenticated %}has-sidebar{% endif %}">
+    <div class="wrapper">
+        <!-- Sidebar (solo visible cuando está autenticado) -->
+        {% if user.is_authenticated %}
+        <div class="sidebar bg-dark">
+            <div class="sidebar-header text-center py-4">
+                <div class="user-info">
+                    <img src="{% static 'img/user-avatar.png' %}" alt="Usuario" class="rounded-circle mb-3" width="80">
+                    <h5 class="text-white mb-1">{{ request.user.get_full_name|default:"Usuario" }}</h5>
+                    <small class="text-muted">{{ request.user.profile.departamento|default:"Departamento" }}</small>
+                </div>
+            </div>
+
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Solicitudes SIC
+                    </a>
+                </li>
+                <!-- En la sección del sidebar -->
+                <li class="nav-item">
+                    <a href="{% url 'historial' %}" class="nav-link {% if request.path == '/historial/' %}active{% endif %}">
+                        <i class="fas fa-history me-2"></i>
+                        Historial de Solicitudes
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer mt-auto p-3">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger w-100">
+                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Content -->
+        <div class="content {% if not user.is_authenticated %}full-width{% endif %}">
+            <!-- Navbar superior -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+                <div class="container-fluid">
+                    {% if user.is_authenticated %}
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    {% endif %}
+                    <a class="navbar-brand" href="{% url 'home' %}">
+                        <img src="{% static 'img/logo.png' %}" alt="Logo" height="30">
+                        Sistema Compras
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="container-fluid py-4">
+                {% block content %}{% endblock %}
+            </main>
+
+            <!-- Footer -->
+            <footer class="bg-dark text-white py-3">
+                <div class="container text-center">
+                    <small>© {% now 'Y' %} Sistema de Autorización de Compras</small>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- jQuery (necesario para Bootstrap y sidebar) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    
+    <!-- JavaScript del sidebar -->
+    <script src="{% static 'js/sidebar.js' %}"></script>
+    
+    <!-- JavaScript específico de cada página -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
