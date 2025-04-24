@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <!-- Mantiene los estilos originales del admin -->
+    <link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/responsive.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    {% if user.is_authenticated %}
+        {% include 'admin/_sidebar.html' %}
+    {% endif %}
+    
+    <div class="content">
+        {% include 'admin/_header.html' %}
+        
+        <main class="container-fluid py-4">
+            {{ block.super }}
+        </main>
+        
+        {% include 'admin/_footer.html' %}
+    </div>
+</div>
+{% endblock %}

@@ -19,14 +19,14 @@
 </head>
 <body class="{% if user.is_authenticated %}has-sidebar{% endif %}">
     <div class="wrapper">
-        <!-- Sidebar (solo visible cuando está autenticado) -->
+        <!-- Sidebar -->
         {% if user.is_authenticated %}
         <div class="sidebar bg-dark">
             <div class="sidebar-header text-center py-4">
                 <div class="user-info">
                     <img src="{% static 'img/user-avatar.png' %}" alt="Usuario" class="rounded-circle mb-3" width="80">
-                    <h5 class="text-white mb-1">{{ request.user.get_full_name|default:"Usuario" }}</h5>
-                    <small class="text-muted">{{ request.user.profile.departamento|default:"Departamento" }}</small>
+                    <h5 class="text-white mb-1">{{ request.user.persona.nombre_completo }}</h5>
+                    <small class="text-muted">{{ request.user.email }}</small>
                 </div>
             </div>
 
@@ -37,13 +37,20 @@
                         Solicitudes SIC
                     </a>
                 </li>
-                <!-- En la sección del sidebar -->
                 <li class="nav-item">
                     <a href="{% url 'historial' %}" class="nav-link {% if request.path == '/historial/' %}active{% endif %}">
                         <i class="fas fa-history me-2"></i>
-                        Historial de Solicitudes
+                        Historial
                     </a>
                 </li>
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a href="{% url 'admin:index' %}" class="nav-link {% if '/admin/' in request.path %}active{% endif %}">
+                        <i class="fas fa-cog me-2"></i>
+                        Administración
+                    </a>
+                </li>
+                {% endif %}
             </ul>
 
             <div class="sidebar-footer mt-auto p-3">
@@ -88,16 +95,12 @@
         </div>
     </div>
 
-    <!-- jQuery (necesario para Bootstrap y sidebar) -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <!-- Bootstrap JS -->
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     
-    <!-- JavaScript del sidebar -->
-    <script src="{% static 'js/sidebar.js' %}"></script>
-    
-    <!-- JavaScript específico de cada página -->
     {% block extra_js %}{% endblock %}
 </body>
 </html>

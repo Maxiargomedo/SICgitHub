@@ -102,3 +102,32 @@ body.has-sidebar .content {
       margin-left: 250px;
   }
 }
+
+/* Admin integrado */
+#content-main {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.django-admin table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
+}
+
+.django-admin table td, 
+.django-admin table th {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.django-admin .paginator {
+  margin-top: 20px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
